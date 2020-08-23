@@ -1,0 +1,163 @@
+<div [ngClass]="{ 'loding-hide': loadingImage }" id="loding">
+  <img src="assets/img/loding.gif">
+</div>
+<div [ngClass]="{ 'loding-ui-view': showLoading }" id="ui-view">
+  <div class="animated fadeIn">
+    <form (ngSubmit)="createSales()" [formGroup]="salesAddForm" class="form-horizontal" enctype="multipart/form-data" method="post">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-block">
+              <h5 class="card-title">Products Sale</h5>
+              <div class="form-group row">
+                <div class="col-md-3">
+                  <div class="form-group row">
+                    <div class="col-md-12">
+                      <!-- <label class="form-control-label" for="allCategory">Select Category </label> -->
+                      <select (ngModelChange)="selectCat($event)" [(ngModel)]="sales.allCategory" class="form-control"
+                              formControlName="allCategory"
+                              id="allCategory" name="allCategory">
+                        <option disabled selected value="">Select a Category</option>
+                        <option *ngFor="let item of categoryList" value="{{item.id}}">{{item.name}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div *ngIf="sales.allCategory !=0">
+                    <div class="form-group row">
+                      <div class="col-md-12">
+                        <label class="form-control-label" for="allProduct">Product</label>
+                        <select (ngModelChange)="selectProduct($event)" [(ngModel)]="sales.allProduct" class="form-control"
+                                formControlName="allProduct"
+                                id="allProduct" name="allProduct">
+                          <option disabled selected value="">Please Select</option>
+                          <option *ngFor="let item of productList" value="{{item.id}}">{{item.name}} -
+                            ({{item.availableQuantity}})
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-9">
+                  <div class="table-responsive">
+                    <table class="table table-bordered" id="add-product">
+                      <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Serial</th>
+                        <th style="width: 30%;">Name</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Total</th>
+                        <th></th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr *ngFor="let po of salesAddForm.controls.products.controls; let i=index" class="panel panel-default"
+                          formArrayName="products">
+                        <td>{{i + 1}}</td>
+                        <td [formGroupName]="i"><input [(ngModel)]="sales.products[i].serialNumber" [formControl]="po.controls.serialNumber"
+                                                       class="form-control form-control-sm" readonly
+                                                       type="text"></td>
+                        <td><input [(ngModel)]="sales.products[i].name" [formControl]="po.controls.name"
+                                   class="form-control form-control-sm"
+                                   type="text"></td>
+                        <td><input (ngModelChange)="itemChange()" [(ngModel)]="sales.products[i].quantity"
+                                   [formControl]="po.controls.quantity"
+                                   class="form-control form-control-sm" type="number"></td>
+                        <td><input (ngModelChange)="itemChange()" [(ngModel)]="sales.products[i].selling_price"
+                                   [formControl]="po.controls.selling_price"
+                                   class="form-control form-control-sm" type="number"></td>
+                        <td><input [(ngModel)]="sales.products[i].total" [formControl]="po.controls.total"
+                                   class="form-control form-control-sm" name="total"
+                                   readonly type="text"></td>
+                        <td>
+                          <button (click)="deleteTableRow(i)" class="btn btn-danger btn-sm">x</button>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 px-3">
+                  <fieldset class="scheduler-border">
+                    <legend class="scheduler-border">Customer</legend>
+                    <div class="form-group row">
+                      <label class="col-5 form-control-label" for="customer">Customer</label>
+                      <div class="col-7">
+                        <select (ngModelChange)="selectCustomer($event)" [(ngModel)]="sales.customer" class="form-control"
+                                formControlName="customer"
+                                id="customer" name="customer">
+                          <option selected value="">Guest Checkout</option>
+                          <option *ngFor="let item of allCustomer" value="{{item.id}}">{{item.name}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div *ngIf="selectedCustomer" class="form-group row">
+                      <label class="col-5 form-control-label" for="redeemLoyaltyPoints">Redeem Loyalty Points
+                        <strong>({{selectedCustomer.loyaltyPoints || 0}})</strong></label>
+                      <div class="col-7">
+                        <input (ngModelChange)="toggleLoyalty($event)" [(ngModel)]="sales.redeemLoyaltyPoints"
+                               formControlName="redeemLoyaltyPoints" id="redeemLoyaltyPoints"
+                               name="redeemLoyaltyPoints"
+                               type="checkbox">
+                      </div>
+                    </div>
+
+                  </fieldset>
+                </div>
+                <div class="col-md-6 px-3">
+                  <fieldset class="scheduler-border">
+                    <legend class="scheduler-border">Payment</legend>
+                    <div class="form-group row">
+                      <label class="col-5 col-form-label" for="subTotal">Sub Total</label>
+                      <div class="col-7">
+                        <input [(ngModel)]="sales.subTotal" class="form-control form-control-sm" formControlName="subTotal" name="subTotal"
+                               readonly type="text">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-5 col-form-label" for="discount">Discount</label>
+                      <div class="col-7">
+                        <input (ngModelChange)="changeGrandTotal()" [(ngModel)]="sales.discount" class="form-control form-control-sm"
+                               formControlName="discount" name="discount"
+                               type="number">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-5 col-form-label">Vat</label>
+                      <div class="col-7">
+                        <input [value]="vat" class="form-control form-control-sm" readonly type="text">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-5 col-form-label" for="grandTotal">Grand Total</label>
+                      <div class="col-7">
+                        <input [(ngModel)]="sales.grandTotal" class="form-control form-control-sm" formControlName="grandTotal"
+                               name="grandTotal"
+                               readonly type="text">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-5 form-control-label" for="paymentType">Payment Type <span>*</span></label>
+                      <div class="col-7">
+                        <select [(ngModel)]="sales.paymentType" class="form-control" formControlName="paymentType" id="paymentType"
+                                name="paymentType" required type="text">
+                          <option value="0">Please Select</option>
+                          <option *ngFor="let item of paymentTypeList" value="{{item}}">{{item}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <button [disabled]="!salesAddForm.valid" class="btn btn-info btn-sm" type="submit">New Sales</button>
+                  </fieldset>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

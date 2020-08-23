@@ -1,0 +1,103 @@
+<div [ngClass]="{ 'loding-hide': lodingImage }" id="loding">
+  <img src="assets/img/loding.gif">
+</div>
+<div [ngClass]="{ 'loding-ui-view': showloding }" id="ui-view">
+  <div class="animated fadeIn">
+    <div class="row">
+      <div class="col-lg-12">
+        <ngb-tabset #tabs>
+          <ngb-tab title="Profile Setting">
+            <ng-template ngbTabContent>
+              <form [formGroup]="profileAddForm" class="form-horizontal" enctype="multipart/form-data" method="post">
+                <div class="col-lg-6 px-3">
+                  <div class="form-group row">
+                    <label class="col-5 col-form-label" for="name">Name <span>*</span> </label>
+                    <div class="col-7">
+                      <input [(ngModel)]="profile.name" class="form-control" formControlName="name" id="name" name="name" type="text">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-5 col-form-label" for="phone">Phone <span>*</span> </label>
+                    <div class="col-7">
+                      <input [(ngModel)]="profile.phone" class="form-control" formControlName="phone" id="phone" name="phone" required
+                             type="text">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-5 col-form-label" for="email">Email <span>*</span></label>
+                    <div class="col-7">
+                      <input [(ngModel)]="profile.email" class="form-control" formControlName="email" id="email" name="email" readonly
+                             type="text">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-5 col-form-label" for="address">Address <span>*</span> </label>
+                    <div class="col-7">
+                      <input [(ngModel)]="profile.address" class="form-control" formControlName="address" id="address" name="address"
+                             required type="text">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-5 form-control-label">image</label>
+                    <div class="col-md-7">
+                      <p><img *ngIf="profile.image !=''" [src]="profile.image" class="img-thumbnail" style="height: 150px;width: 150px;"/>
+                      </p>
+                      <div class="input-group">
+												<span class="input-group-btn">
+														<label class="btn btn-primary">
+														<samp>Browse</samp>...
+															<input (change)="fileChange($event)" [attr.multiple]="allowMultiple" accept="{{fileType}}" name="file"
+                                     style="display: none;" type="file">
+														</label>
+													</span>
+                        <input [class.ng-invalid-right]="required && !DisplayedText" [class.ng-valid-right]="required && DisplayedText"
+                               [value]="DisplayedText" class="form-control" disabled="" style="height: 35px;" type="text">
+                      </div>
+                    </div>
+                  </div>
+                  <button (click)="UpdateProfile(this.profile)" [disabled]="!profileAddForm.valid" class="btn btn-info" type="submit">Update
+                    Profile
+                  </button>
+                </div>
+              </form>
+            </ng-template>
+          </ngb-tab>
+          <ngb-tab id="password-change" title=" Change Password">
+            <ng-template ngbTabContent>
+              <form [formGroup]="profileAddForm" class="form-horizontal" enctype="multipart/form-data" method="post">
+                <div class="col-lg-6 px-3">
+                  <div class="form-group row">
+                    <label class="col-5 col-form-label" for="currentPassword">Current Password <span>*</span> </label>
+                    <div class="col-7">
+                      <input [(ngModel)]="password.currentPassword" class="form-control" formControlName="currentPassword"
+                             id="currentPassword" name="currentPassword" required type="password">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-5 col-form-label" for="newPassword">New Password <span>*</span> </label>
+                    <div class="col-7">
+                      <input [(ngModel)]="password.newPassword" class="form-control" formControlName="newPassword" id="newPassword"
+                             name="newPassword" required type="password">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-5 col-form-label" for="confirmPassword">Confirm Password <span>*</span></label>
+                    <div class="col-7">
+                      <input [(ngModel)]="password.confirmPassword" class="form-control" formControlName="confirmPassword"
+                             id="confirmPassword" name="confirmPassword" required type="password">
+                    </div>
+                  </div>
+                  <button (click)="UpdatePassword()" class="btn btn-info" type="submit">Update Password</button>
+                </div>
+              </form>
+            </ng-template>
+          </ngb-tab>
+        </ngb-tabset>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+

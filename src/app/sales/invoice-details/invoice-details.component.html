@@ -1,0 +1,152 @@
+<div [ngClass]="{ 'loding-hide': loadingImage }" id="loding">
+  <img src="assets/img/loding.gif">
+</div>
+<div [ngClass]="{ 'loding-ui-view': showLoading }" id="ui-view">
+  <div class="animated fadeIn">
+    <div class="card">
+      <div class="card-header card-header-dark">
+        Invoice
+        <strong>#{{invoiceDetails.invoiceNumber}}</strong>
+        <a (click)="printView()" class="btn btn-sm btn-info float-right" href="#" target="_blank"><i class="fa fa-print"></i> Print</a>
+      </div>
+      <div class="card-block" id="printJS-form" style="width: 100%;">
+
+        <div class="row mb-12">
+          <!-- {{invoiceDetails.company}} -->
+          <div class="col-sm-4">
+            <h6 class="mb-3">From:</h6>
+            <div>{{invoiceDetails.settingData.company_name}}</div>
+            <div>Email: {{invoiceDetails.settingData.email}}</div>
+            <div>Phone: {{invoiceDetails.settingData.phone}}</div>
+            <div>Currency: {{invoiceDetails.currency}}</div>
+          </div>
+          <!--/.col-->
+
+          <!--/.col-->
+          <div class="col-sm-8 d-flex justify-content-end">
+            <div class="col-sm-4">
+              <h6 class="mb-3">To</h6>
+              <div><strong>Invoice Code :</strong><span style="color: #1ab394;">{{invoiceDetails.invoiceNumber}}</span></div>
+              <div>{{invoiceDetails.date}}</div>
+              <div>Name: {{invoiceDetails.name}}</div>
+              <div>Phone: {{invoiceDetails.phone}}</div>
+              <div>Email: {{invoiceDetails.email}}</div>
+            </div>
+          </div>
+          <!--/.col-->
+        </div>
+        <!--/.row-->
+        <br/>
+        <div class="table">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th class="center">#</th>
+              <th>SKU</th>
+              <th>Name</th>
+              <th class="center">Quantity</th>
+              <th class="right">Unit Cost</th>
+              <th class="right">Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of invoiceDetails.orderProducts; let i = index" [attr.data-index]="i">
+              <td class="center">{{i + 1}}</td>
+              <td class="left">{{item.product.serialNumber}}</td>
+              <td class="left">{{item.product.name}}</td>
+              <td class="center">{{item.quantity}}</td>
+              <td class="right">{{item.unitPrice}}</td>
+              <td class="right">{{item.totalPrice}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <br/>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="d-flex justify-content-end">
+              <div class="col-md-2 text-right">
+                <p>
+                  <strong>Sub Total </strong> {{invoiceDetails.netAmount}}
+                </p>
+              </div>
+            </div>
+            <!-- <table class="table table-clear" style="display: initial">
+                <tbody>
+                    <tr>
+                        <td class="left"><strong>Sub Total</strong></td>
+                        <td class="right">{{invoiceDetails.sub_total}}</td>
+                    </tr>
+                </tbody>
+            </table> -->
+            <!-- <a href="#" class="btn btn-success"><i class="fa fa-usd"></i> Proceed to Payment</a> -->
+          </div>
+          <!--/.col-->
+
+        </div>
+        <!--/.row-->
+        <br/>
+        <div class="table">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th class="center">Payment Date</th>
+              <th class="right">Amount</th>
+              <th class="right">Payment Method</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="left">{{invoice.createdAt}}</td>
+              <td class="center">{{invoice.grossAmount}}</td>
+              <td class="right">{{ invoice.paymentType}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 d-flex justify-content-end">
+            <div class="col-lg-4">
+              <table class="table table-clear">
+                <tbody>
+                <tr>
+                  <td class="left">Net Total</td>
+                  <td class="right">{{invoice.netAmount}}</td>
+                </tr>
+                <tr>
+                  <td class="left">VAT %</td>
+                  <td class="right">{{invoice.vatPercentage}}</td>
+                </tr>
+                <tr>
+                  <td class="left">Grand Total</td>
+                  <td class="right">{{invoice.grossAmount}}</td>
+                </tr>
+
+                <tr>
+                  <td class="left">Discount %</td>
+                  <td class="right">{{invoice.discountPercentage || '-' }}</td>
+                </tr>
+                <tr>
+                  <td class="left">Loyalty Discount Amount</td>
+                  <td class="right">{{invoice.loyaltyDiscountAmount || '-'}}</td>
+                </tr>
+                <tr>
+                  <td class="left">Total Paid</td>
+                  <td class="right">{{invoice.totalPaid}}</td>
+                </tr>
+
+
+                </tbody>
+              </table>
+
+            </div>
+            <!-- <a href="#" class="btn btn-success"><i class="fa fa-usd"></i> Proceed to Payment</a> -->
+          </div>
+          <!--/.col-->
+
+        </div>
+        <!--/.row-->
+      </div>
+    </div>
+  </div>
+</div>

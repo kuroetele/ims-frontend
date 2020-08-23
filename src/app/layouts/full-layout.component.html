@@ -1,0 +1,58 @@
+<header class="app-header navbar">
+  <button appMobileSidebarToggler class="navbar-toggler d-lg-none" type="button">&#9776;</button>
+  <a class="navbar-brand" routerLink="/dashboard">
+    <img [src]="setting.image">
+  </a>
+  <button appSidebarToggler class="navbar-toggler d-md-down-none" type="button">&#9776;</button>
+  <ul class="nav navbar-nav ml-auto">
+    <li class="nav-item dropdown" ngbDropdown>
+      <a class="nav-link dropdown-toggle" ngbDropdownToggle>
+        <img *ngIf="userData.image ==''" class="img-avatar" src="assets/img/avatars/4.jpg">
+        <img *ngIf="userData.image !=''" [src]="userData.image" class="img-avatar">
+        <span class="d-md-down-none">{{userData.profileName}}</span>
+      </a>
+      <div aria-labelledby="dropdownBasic1" class="dropdown-menu dropdown-menu-left" ngbDropdownMenu>
+        <a class="dropdown-item" routerLink="/profile-settings"><i class="fa fa-user"></i> Profile</a>
+        <a (click)="logout()" class="dropdown-item"><i class="fa fa-lock"></i> Logout</a>
+      </div>
+    </li>
+  </ul>
+</header>
+<div class="app-body">
+  <div class="sidebar">
+    <nav class="sidebar-nav">
+      <ul *ngIf="showMenu" class="nav">
+        <ng-container *ngFor="let item of nav; let i=index">
+          <li *ngIf="item.subMenus < 1" class="nav-item">
+            <a class="nav-link" routerLink="/{{item.route}}" routerLinkActive="active"><i class="{{item.icon}}"></i>{{item.name}}</a>
+          </li>
+          <li *ngIf="item.subMenus && item.subMenus.length > 0" appNavDropdown class="nav-item nav-dropdown" routerLinkActive="open">
+            <a *ngIf="item.subMenus" appNavDropdownToggle
+               class="nav-link nav-dropdown-toggle"><i class="{{item.icon}}"></i>{{item.name}}</a>
+            <ul *ngIf="item.subMenus && item.subMenus.length > 0" class="nav-dropdown-items">
+              <li *ngFor="let sub of nav[i]['subMenus']" class="nav-item">
+                <a class="nav-link" routerLink="/{{sub.route}}" routerLinkActive="active"> {{sub.name}}</a>
+              </li>
+            </ul>
+          </li>
+        </ng-container>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Main content -->
+  <main class="main">
+    <!-- Breadcrumb -->
+    <ol class="breadcrumb">
+      <app-breadcrumbs></app-breadcrumbs>
+      <!-- Breadcrumb Menu-->
+    </ol>
+    <div class="container-fluid">
+      <alert></alert>
+      <router-outlet></router-outlet>
+    </div><!-- /.conainer-fluid -->
+  </main>
+</div>
+
+<!--<footer class="app-footer">
+</footer>-->

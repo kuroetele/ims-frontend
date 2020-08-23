@@ -1,0 +1,195 @@
+<div [ngClass]="{ 'loding-hide': lodingImage }" id="loding">
+  <img src="assets/img/loding.gif">
+</div>
+<div [ngClass]="{ 'loding-ui-view': showloding }" id="ui-view">
+  <div class="animated fadeIn">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-block">
+            <div class="card-block-title">
+              <h5 class="card-title">Customer</h5>
+              <button (click)="open(content)" class="btn btn-info" data-toggle="modal" id="add_btn" style="float: right;" type="button"> Add
+                Customer
+              </button>
+            </div>
+            <div class="table-responsive">
+              <table [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered table-hover" datatable id="table"
+                     width="100%">
+                <thead>
+                <tr>
+                  <th>#Sl</th>
+                  <th>Name</th>
+                  <th>Phone</th>
+                  <th>Loyalty Points</th>
+                  <th>Address</th>
+                  <th>Status</th>
+                  <th class="action">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let item of customerList; let i = index" [attr.data-index]="i">
+                  <td>{{i + 1}}</td>
+                  <td>{{item.name}}</td>
+                  <td>{{item.phone}}</td>
+                  <td>{{item.loyaltyPoints || 0}}</td>
+                  <td>{{item.address}}</td>
+                  <td><span *ngIf="!item.deleted" class="badge badge-success">Active</span> <span *ngIf="item.deleted"
+                                                                                                  class="badge badge-danger">Inactive</span>
+                  </td>
+                  <td class="action">
+                    <button (click)="openCustomerInfoModal(this.customerList[i].id,customerinfo, item)"
+                            class="btn btn-info btn-sm"
+                            type="button">
+                      <i class="fa fa-user"></i></button>
+                    <button (click)="edit(this.customerList[i].id,content)" class="btn btn-outline-primary btn-sm" type="button"><i
+                      class="fa fa-pencil fa-lg mt-1"></i></button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--/.col--> <!-- <button  class="btn btn-outline-danger btn-sm">x</button> -->
+    </div>
+  </div>
+</div>
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-info" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{modalTitle}}</h4>
+        <button (click)="d('Cross click')" aria-label="Close" class="close" type="button">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="customerAddForm" class="form-horizontal" enctype="multipart/form-data" method="post">
+          <div class="form-group row">
+            <label class="col-5 col-form-label" for="name">Name <span>*</span></label>
+            <div class="col-7">
+              <input [(ngModel)]="customer.name" class="form-control" formControlName="name" id="name" name="name" required type="text">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-5 col-form-label" for="email">Email <span>*</span></label>
+            <div class="col-7">
+              <input [(ngModel)]="customer.email" class="form-control" formControlName="email" id="email" name="email" required
+                     type="email">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-5 col-form-label" for="phone">Phone <span>*</span></label>
+            <div class="col-7">
+              <input [(ngModel)]="customer.phone" class="form-control" formControlName="phone" id="phone" name="phone" required type="text">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-5 col-form-label" for="address">Address <span>*</span></label>
+            <div class="col-7">
+              <textarea [(ngModel)]="customer.address" class="form-control" formControlName="address" id="address" name="address" required
+                        type="text"></textarea>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-5 col-form-label" for="deleted">status</label>
+            <div class="col-7">
+              <select [(ngModel)]="customer.deleted" class="form-control" formControlName="deleted" id="deleted" name="deleted">
+                <option value="false">Active</option>
+                <option value="true">Inactive</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-5 form-control-label">image</label>
+            <div class="col-md-7">
+              <img *ngIf="getCustomer.image !=''" [src]="getCustomer.image" class="img-thumbnail"
+                   style="height: 100px;width: 100px;"/>
+              <div class="input-group">
+                    <span class="input-group-btn">
+                            <label class="btn btn-primary">
+                              <samp>Browse</samp>...
+                                <input #fileInput (change)="fileChange($event)" [attr.multiple]="allowMultiple" accept="{{fileType}}"
+                                       name="file"
+                                       style="display: none;" type="file">
+                            </label>
+                        </span>
+                <input [class.ng-invalid-right]="required && !DisplayedText" [class.ng-valid-right]="required && DisplayedText"
+                       [value]="DisplayedText" class="form-control"
+                       disabled="" style="height: 35px;"
+                       type="text">
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button (click)="d('Cross click')" aria-label="Close" class="btn btn-secondary" type="button">Close</button>
+        <button (click)="save(this.customer)" [disabled]="!customerAddForm.valid" class="btn btn-outline-primary" type="submit">Save
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #customerinfo let-c="close" let-d="dismiss">
+  <div class="modal-info" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Customer Information</h4>
+        <button (click)="d('Cross click')" aria-label="Close" class="close" type="button">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row mb-4">
+          <div class="card-block">
+            <div class="col-sm-6">
+              <h6 class="mb-3">Basic Information:</h6>
+              <div>{{customerInfo.email}}</div>
+              <div>{{customerInfo.phone}}</div>
+              <div>{{customerInfo.address}}</div>
+              <br/>
+              <div><strong>Loyalty Points - {{customerInfo.loyaltyPoints || 0}}</strong></div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <img *ngIf="customerInfo.image !=''" [src]="customerInfo.image" class="img-thumbnail"
+                 style="height: 150px;width: 150px;"/>
+          </div>
+          <div class="col-sm-12">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th class="center">#</th>
+                <th>Invoice Code</th>
+                <th class="center">Payment Method</th>
+                <th class="right">Total Amount</th>
+                <th class="right">Date</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let item of customerInfo.customerPurchase; let i = index" [attr.data-index]="i">
+                <td class="center">{{i + 1}}</td>
+                <td class="left"><a (click)="salesInvoiceDetails(this.customerInfo.customerPurchase[i].id)">{{item.invoiceNumber}}</a></td>
+                <td class="center">{{item.paymentType}}</td>
+                <td class="right">{{((item.amount == null) ? '0.00' : item.amount)}} {{setting.currency}}</td>
+                <td class="right">{{item.createdAt}}</td>
+              </tr>
+              <tr *ngIf="customerInfo.customerPurchase < 1">
+                <td [colSpan]="5" style="text-align: center">Customer is yet to make any purchases</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="d('Cross click')" aria-label="Close" class="btn btn-secondary" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+

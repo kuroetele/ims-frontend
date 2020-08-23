@@ -1,0 +1,81 @@
+<div [ngClass]="{ 'loding-hide': lodingImage }" id="loding">
+  <img src="assets/img/loding.gif">
+</div>
+<div [ngClass]="{ 'loding-ui-view': showloding }" id="ui-view">
+  <div class="animated fadeIn">
+    <form (ngSubmit)="searchReport()" [formGroup]="reportSearchForm" class="form-horizontal" enctype="multipart/form-data" method="post">
+      <div class="row justify-content-end">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-block">
+              <h5 class="card-title">Sales Report</h5>
+              <div class="row">
+                <div class="col-sm-3">
+                  <div class="form-group row">
+                    <label class="col-sm-4 form-control-label" for="fromdate">Form Date</label>
+                    <div class="col-8">
+                      <div class="input-group">
+                        <input #d="ngbDatepicker" [(ngModel)]="report.fromdate" class="form-control" formControlName="fromdate"
+                               id="fromdate"
+                               name="fromdate" ngbDatepicker placeholder="yyyy-mm-dd" required>
+                        <button (click)="d.toggle()" class="input-group-addon" type="button">
+                          <i class="fa fa-calendar"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group row">
+                    <label class="col-sm-4 form-control-label" for="todate">To Date</label>
+                    <div class="col-8">
+                      <div class="input-group">
+                        <input #to="ngbDatepicker" [(ngModel)]="report.todate" class="form-control" formControlName="todate" id="todate"
+                               name="todate" ngbDatepicker placeholder="yyyy-mm-dd" required>
+                        <button (click)="to.toggle()" class="input-group-addon" type="button">
+                          <i class="fa fa-calendar"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <p>
+                    <button class="btn btn-info" type="submit" type="button">search</button>
+                  </p>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered table-hover" datatable id="table"
+                       width="100%">
+                  <thead>
+                  <tr>
+                    <th>#Sl</th>
+                    <th>Invoice Code</th>
+                    <th>Customer Name</th>
+                    <th>Amount</th>
+                    <th>Payment Type</th>
+                    <th>Sold By</th>
+                    <th>Date</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let item of reportList; let i = index" [attr.data-index]="i">
+                    <td>{{i + 1}}</td>
+                    <td>{{item.invoiceNumber}}</td>
+                    <td>{{item.customer ? item.customer.name : '-'}}</td>
+                    <td>{{item.grossAmount}} {{setting.currency}}</td>
+                    <td>{{ item.paymentType}}</td>
+                    <td>{{item.soldBy}}</td>
+                    <td>{{item.createdAt}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
