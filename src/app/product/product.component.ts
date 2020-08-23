@@ -3,9 +3,7 @@ import {Router} from '@angular/router';
 import {Subject} from 'rxjs';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {AlertService, AppService, ProductService} from '../_services/index';
-// import $ from 'jquery/dist/jquery';
 import {NgbActiveModal, NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {appConfig} from '../app.config';
 import {Util} from '../_helpers/util';
 
 class Product {
@@ -32,6 +30,7 @@ export class ProductComponent implements OnInit {
   @Input() fileType: string;
   @Input() required: boolean;
   @Input() maxSizeInKb: number;
+  // tslint:disable-next-line:no-output-on-prefix
   @Output() onSelection = new EventEmitter<FileList>();
   DisplayedText = '';
   fileList: any;
@@ -47,12 +46,11 @@ export class ProductComponent implements OnInit {
   dtTrigger = new Subject(); //  DataTable
   productList: Product[] = []; // Table Data list
   productAddForm: FormGroup;
-  randomnumber = Math.floor(Math.random() * 100000000);
   getProduct = {
     id: '',
     serialNumber: '',
     name: '',
-    category: {},
+    categoryId: 0,
     price: '',
     costPrice: '',
     minQuantity: '',
@@ -61,7 +59,6 @@ export class ProductComponent implements OnInit {
     deleted: false,
     image: ''
   };
-  closeResult: string; // Modal Close
   productInfo = {
     id: '',
     serialNumber: '',
@@ -79,7 +76,7 @@ export class ProductComponent implements OnInit {
     id: '',
     serialNumber: '',
     name: '',
-    category: {},
+    categoryId: 0,
     price: '',
     costPrice: '',
     availableQuantity: '',
@@ -92,8 +89,8 @@ export class ProductComponent implements OnInit {
   modalTitle: string;
   cat = {};
   setting = {currency: ''};
-  showloding = true;
-  lodingImage = false;
+  showLoading = true;
+  loadingImage = false;
 
   constructor(
     public router: Router,
@@ -107,13 +104,13 @@ export class ProductComponent implements OnInit {
   ngOnInit() {
 
     setTimeout(() => {
-      this.showloding = false;
-      this.lodingImage = true;
+      this.showLoading = false;
+      this.loadingImage = true;
     }, 500);
     this.productAddForm = new FormGroup({
       serialNumber: new FormControl(''),
       name: new FormControl('', Validators.compose([Validators.required])),
-      category: new FormControl('', Validators.compose([Validators.required])),
+      categoryId: new FormControl('', Validators.compose([Validators.required])),
       availableQuantity: new FormControl('', Validators.compose([Validators.required])),
       minQuantity: new FormControl('', Validators.compose([Validators.required])),
       maxQuantity: new FormControl('', Validators.compose([Validators.required])),
@@ -121,8 +118,6 @@ export class ProductComponent implements OnInit {
       price: new FormControl('', Validators.compose([Validators.required])),
       deleted: new FormControl(''),
     });
-
-    // this.customer = {customer_code:this.randomnumber};
 
     this.allProduct();
 
@@ -153,15 +148,14 @@ export class ProductComponent implements OnInit {
     }
 
     this.getProduct.id = '';
-    this.randomnumber = Math.floor(Math.random() * 100000000);
-    this.product.serialNumber = this.randomnumber + '';
+    this.product.serialNumber = new Date().getTime().toString();
     this.product.name = '';
     this.product.costPrice = '';
     this.product.price = '';
     this.product.minQuantity = '';
     this.product.maxQuantity = '';
     this.product.availableQuantity = '';
-    this.product.category = {};
+    this.product.categoryId = 0;
     this.product.deleted = false;
     this.product.image = '';
 
@@ -185,7 +179,7 @@ export class ProductComponent implements OnInit {
           id: this.getProduct.id,
           serialNumber: this.getProduct.serialNumber,
           name: this.getProduct.name,
-          category: this.getProduct.category['id'],
+          categoryId: (data as any).data.category.id,
           price: this.getProduct.price,
           costPrice: this.getProduct.costPrice,
           availableQuantity: this.getProduct.availableQuantity,
@@ -201,7 +195,7 @@ export class ProductComponent implements OnInit {
 
   }
 
-  openProductInfoMdal(id, customerinfo) {
+  openProductInfoModal(id, customerInfo) {
     this.loadShow();
     this.productInfo.image = '';
     this.dataService.getProductInfo(id)
@@ -222,7 +216,7 @@ export class ProductComponent implements OnInit {
       };
     });
     this.loadHide();
-    this.modalReference = this.modalService.open(customerinfo);
+    this.modalReference = this.modalService.open(customerInfo);
   }
 
   fileChange(event: any) {
@@ -259,7 +253,9 @@ export class ProductComponent implements OnInit {
   }
 
   async insertAction(val) {
-
+    if (this.productAddForm.value.minQuantity < this.productAddForm.value.maxQuantity) {
+      this.alertService.error('min quantity cannot be less than max quantity');
+    }
     const formData: FormData = new FormData();
     if (this.fileList !== undefined) {
       const file: File = this.fileList[0];
@@ -269,7 +265,7 @@ export class ProductComponent implements OnInit {
     }
     formData.append('serialNumber', this.productAddForm.value.serialNumber);
     formData.append('name', this.productAddForm.value.name);
-    formData.append('categoryId', this.productAddForm.value.category !== 'undefined' ? this.productAddForm.value.category['id'] : null);
+    formData.append('categoryId', this.productAddForm.value.categoryId);
     formData.append('costPrice', this.productAddForm.value.costPrice);
     formData.append('price', this.productAddForm.value.price);
     formData.append('deleted', this.productAddForm.value.deleted + '');
@@ -301,22 +297,13 @@ export class ProductComponent implements OnInit {
     }
   }
 
-  pdfExport() {
-    window.open(appConfig.apiUrl + '/api/product-list-pdf', '_blank');
-  }
-
-  xlExport() {
-    window.open(appConfig.apiUrl + '/api/product-list-excel', '_blank');
-  }
-
-
   loadShow() {
-    this.showloding = true;
-    this.lodingImage = false;
+    this.showLoading = true;
+    this.loadingImage = false;
   }
 
   loadHide() {
-    this.showloding = false;
-    this.lodingImage = true;
+    this.showLoading = false;
+    this.loadingImage = true;
   }
 }

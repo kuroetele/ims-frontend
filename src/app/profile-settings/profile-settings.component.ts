@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {AlertService, AppService} from '../_services/index';
+import {AlertService, AppService} from '../_services';
 import {NgbTabset} from '@ng-bootstrap/ng-bootstrap';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Util} from '../_helpers/util';
@@ -30,11 +30,11 @@ export class ProfileSettingsComponent implements OnInit, AfterViewInit {
   @Input() required: boolean;
   @Input() maxSizeInKb: number;
   @Output() onSelection = new EventEmitter<FileList>();
-  DisplayedText: string = '';
+  displayedText = '';
   fileList: any;
   getToken: string;
-  showloding = true;
-  lodingImage = false;
+  showLoading = true;
+  loadingImage = false;
   redirectToDashboard = false;
   @ViewChild('tabs', {static: true, read: NgbTabset})
   private tabs: NgbTabset;
@@ -50,8 +50,8 @@ export class ProfileSettingsComponent implements OnInit, AfterViewInit {
   ngOnInit() {
 
     setTimeout(() => {
-      this.showloding = false;
-      this.lodingImage = true;
+      this.showLoading = false;
+      this.loadingImage = true;
     }, 500);
     this.profileAddForm = new FormGroup({
       name: new FormControl('', Validators.compose([Validators.required])),
@@ -92,11 +92,11 @@ export class ProfileSettingsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  UpdateProfile(val) {
+  updateProfile(val) {
     this.insertAction(val);
   }
 
-  UpdatePassword() {
+  updatePassword() {
     if (this.password.currentPassword === '') {
       this.alertService.error('Please type current Password');
     } else if (this.password.newPassword === '') {
@@ -130,21 +130,21 @@ export class ProfileSettingsComponent implements OnInit, AfterViewInit {
       if (validFileType.toLowerCase().indexOf(extension) < 0) {
         alert('please select valid file type. The supported file types are .jpg , .png , .bmp');
         this.fileList = null;
-        this.DisplayedText = '';
+        this.displayedText = '';
         return false;
       }
       if (this.fileList[0].size > 65535) {
         alert(`File size is more than 65 Kb`);
         this.fileList = null;
-        this.DisplayedText = '';
+        this.displayedText = '';
         return false;
       }
       const multipleFile = this.fileList.length > 1;
       if (multipleFile) {
-        this.DisplayedText = this.fileList.length + ' file(s) has been selected';
+        this.displayedText = this.fileList.length + ' file(s) has been selected';
       } else {
         const file: File = this.fileList[0];
-        this.DisplayedText = file.name;
+        this.displayedText = file.name;
       }
       this.onSelection.emit(this.fileList);
     }

@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AlertService, AuthenticationService, SettingService} from '../_services';
+import {map} from 'rxjs/operators';
 
 
 @Component({
@@ -13,11 +14,10 @@ export class LoginComponent implements OnInit {
   username: string;
   password: string;
   token: string;
-  textMesg: any;
+  textMessage: any;
   show = false;
   model: any = {};
   loading = false;
-  returnUrl: string;
   setting = {image: ''};
 
   constructor(
@@ -30,19 +30,12 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    if (localStorage.getItem('currentUser') != null) {
-      // this.router.navigate(['/dashboard']);
-    }
-    // get return url from route parameters or default to '/'
-    // this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-
     this.settingService.getSettingSubject()
+      .pipe(map(data => data as any))
       .subscribe(data => {
-        this.setting = {image: (data as any).image};
+        this.setting = {image: data.image};
       });
   }
-
 
   onLoggedIn() {
     this.loading = true;
@@ -61,7 +54,7 @@ export class LoginComponent implements OnInit {
         },
         error => {
           this.show = true;
-          this.textMesg = error;
+          this.textMessage = error;
           this.loading = false;
           this.alertService.error(error);
         });

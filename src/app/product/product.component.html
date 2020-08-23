@@ -1,7 +1,7 @@
-<div [ngClass]="{ 'loding-hide': lodingImage }" id="loding">
+<div [ngClass]="{ 'loding-hide': loadingImage }" id="loding">
   <img src="assets/img/loding.gif">
 </div>
-<div [ngClass]="{ 'loding-ui-view': showloding }" id="ui-view">
+<div [ngClass]="{ 'loding-ui-view': showLoading }" id="ui-view">
   <div class="animated fadeIn">
     <div class="row">
       <div class="col-lg-12">
@@ -46,7 +46,7 @@
                                                                                                   class="badge badge-danger">Inactive</span>
                   </td>
                   <td class="action">
-                    <button (click)="openProductInfoMdal(this.productList[i].id,productinfo)" class="btn btn-info btn-sm" type="button"><i
+                    <button (click)="openProductInfoModal(this.productList[i].id,productinfo)" class="btn btn-info btn-sm" type="button"><i
                       class="fa fa-info"></i></button>
                     <button (click)="edit(this.productList[i].id,content)" class="btn btn-outline-primary btn-sm" type="button"><i
                       class="fa fa-pencil fa-lg mt-1"></i></button>
@@ -86,9 +86,9 @@
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-5 form-control-label" for="category">Category <span>*</span></label>
+              <label class="col-5 form-control-label" for="categoryId">Category <span>*</span></label>
               <div class="col-7">
-                <select [(ngModel)]="product.category" class="form-control" formControlName="category" id="category" name="category"
+                <select [(ngModel)]="product.categoryId" class="form-control" formControlName="categoryId" id="categoryId" name="categoryId"
                         required>
                   <option disabled selected value="">Please Select</option>
                   <option *ngFor="let item of cat" value="{{item.id}}">{{item.name}}</option>

@@ -11,7 +11,7 @@
                 </div>
                 <h1 class="text-center" style="color: #36a9e1;margin-bottom: 25px;">Login</h1>
                 <!-- <p class="text-muted text-center">Sign In to your account</p> -->
-                <span *ngIf="show" class="help-block alert-text">{{textMesg}}</span>
+                <span *ngIf="show" class="help-block alert-text">{{textMessage}}</span>
                 <div class="form-group">
                   <div [ngClass]="{'has-danger': f.submitted && model.username==undefined || model.username==''}" class="input-group mb-2">
                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
