@@ -15,7 +15,7 @@ import {ProfileSettingsComponent} from './profile-settings/profile-settings.comp
 import {SalesReportComponent} from './report/sales-report.component';
 
 import {LoginComponent} from './login/login.component';
-import {AuthGuard} from './_guards/index';
+import {AuthGuard} from './_guards';
 
 export const appRoutes: Routes = [
   {

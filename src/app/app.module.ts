@@ -65,8 +65,6 @@ import {
     BrowserModule,
     AppRoutingModule,
     NgbModule,
-    // BsDropdownModule.forRoot(),
-    // TabsModule.forRoot(),
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
@@ -117,21 +115,9 @@ import {
     TableService,
     NotificationService,
     Title,
-    /*{
-      provide: LocationStrategy,
-      useClass: HashLocationStrategy,
-    },*/
-
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
-
-    // provider used to create fake backend
     fakeBackendProvider
-    /* AppService,
-    AuthGuard,
-    AlertService,
-    AuthenticationService,
-    SettingService */
   ],
   bootstrap: [AppComponent]
 })
