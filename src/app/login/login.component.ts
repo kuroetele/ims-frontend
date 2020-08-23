@@ -2,8 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AlertService, AuthenticationService, SettingService} from '../_services';
 
-// import $ from 'jquery/dist/jquery';
-
 
 @Component({
   selector: 'app-login',

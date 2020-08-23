@@ -4,8 +4,6 @@ import {HttpClient} from '@angular/common/http';
 @Injectable()
 export class CategoryService {
 
-  getToken = window.localStorage.getItem('token');
-
   constructor(private http: HttpClient) {
   }
 
