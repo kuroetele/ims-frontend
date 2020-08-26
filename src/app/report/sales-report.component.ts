@@ -20,7 +20,7 @@ class Report {
   grossAmount: string;
   due: string;
   paymentType: string;
-  soldBy: string;
+  createdBy: any;
 }
 
 @Component({
@@ -92,9 +92,9 @@ export class SalesReportComponent implements OnInit {
   }
 
   getReport() {
-    let fromdate = this.parserFormatter.format(this.report.fromdate);
-    let todate = this.parserFormatter.format(this.report.todate);
-    let setReport = {fromdate: fromdate, todate: todate};
+    const fromdate = this.parserFormatter.format(this.report.fromdate);
+    const todate = this.parserFormatter.format(this.report.todate);
+    const setReport = {fromdate, todate};
     // this.report.todate=todate;
 
     this.dataService.getReportData(setReport)
@@ -118,14 +118,14 @@ export class SalesReportComponent implements OnInit {
   }
 
   pdfExport() {
-    let fromdate = this.parserFormatter.format(this.report.fromdate);
-    let todate = this.parserFormatter.format(this.report.todate);
+    const fromdate = this.parserFormatter.format(this.report.fromdate);
+    const todate = this.parserFormatter.format(this.report.todate);
     window.open(appConfig.apiUrl + '/api/sales-report-pdf?fromdate=' + fromdate + '&todate=' + todate, '_blank');
   }
 
   xlExport() {
-    let fromdate = this.parserFormatter.format(this.report.fromdate);
-    let todate = this.parserFormatter.format(this.report.todate);
+    const fromdate = this.parserFormatter.format(this.report.fromdate);
+    const todate = this.parserFormatter.format(this.report.todate);
     window.open(appConfig.apiUrl + '/api/sales-report-excel?fromdate=' + fromdate + '&todate=' + todate, '_blank');
   }
 
