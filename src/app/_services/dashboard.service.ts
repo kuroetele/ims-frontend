@@ -23,7 +23,7 @@ export class DashboardService {
     return this.http.get('/api/products/low-stock');
   }
 
-  getTopSellingProducts() {
-    return this.http.get('/api/products/top-selling');
+  getTopSellingProductsForCurrentMonth() {
+    return this.http.get('/api/products/top-selling-current-month');
   }
 }

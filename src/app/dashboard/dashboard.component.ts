@@ -47,6 +47,10 @@ export class DashboardComponent implements OnInit {
     private alertService: AlertService,
     private appService: AppService
   ) {
+    this.settingService.getSettingSubject()
+      .subscribe(data => {
+        this.setting = {currency: (data as any).currency};
+      });
   }
 
   public toggleDropdown($event: MouseEvent): void {
@@ -74,7 +78,6 @@ export class DashboardComponent implements OnInit {
       });
 
     this.barChartData = [
-      {data: [0], label: 'Purchases'},
       {data: [0], label: 'Sales'}
     ];
     setTimeout(() => {
@@ -122,13 +125,10 @@ export class DashboardComponent implements OnInit {
         this.lastProduct = (data as any).data;
       });
 
-    this.dataService.getTopSellingProducts()
+    this.dataService.getTopSellingProductsForCurrentMonth()
       .subscribe(data => {
         this.topProducts = (data as any).data;
       });
-
-    let settingData = JSON.parse(localStorage.getItem('setting'));
-    this.setting = {currency: settingData.currency};
 
   }
 

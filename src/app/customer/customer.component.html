@@ -175,7 +175,7 @@
                 <td class="center">{{i + 1}}</td>
                 <td class="left"><a (click)="salesInvoiceDetails(this.customerInfo.customerPurchase[i].id)">{{item.invoiceNumber}}</a></td>
                 <td class="center">{{item.paymentType}}</td>
-                <td class="right">{{((item.amount == null) ? '0.00' : item.amount)}} {{setting.currency}}</td>
+                <td class="right">{{((item.totalPaid == null) ? '0.00' : item.totalPaid)}} {{setting.currency}}</td>
                 <td class="right">{{item.createdAt}}</td>
               </tr>
               <tr *ngIf="customerInfo.customerPurchase < 1">

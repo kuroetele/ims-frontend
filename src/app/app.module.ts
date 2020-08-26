@@ -58,6 +58,7 @@ import {
   SettingService,
   UserService
 } from './_services';
+import {TopProductReportComponent} from './report/top-product-report/top-product-report.component';
 
 
 @NgModule({
@@ -90,6 +91,7 @@ import {
     InvoiceDetailsComponent,
     SettingComponent,
     ProfileSettingsComponent,
+    TopProductReportComponent,
     NAV_DROPDOWN_DIRECTIVES,
     BreadcrumbsComponent,
     SIDEBAR_TOGGLE_DIRECTIVES,

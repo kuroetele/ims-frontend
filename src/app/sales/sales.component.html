@@ -119,14 +119,6 @@
                       </div>
                     </div>
                     <div class="form-group row">
-                      <label class="col-5 col-form-label" for="discount">Discount</label>
-                      <div class="col-7">
-                        <input (ngModelChange)="changeGrandTotal()" [(ngModel)]="sales.discount" class="form-control form-control-sm"
-                               formControlName="discount" name="discount"
-                               type="number">
-                      </div>
-                    </div>
-                    <div class="form-group row">
                       <label class="col-5 col-form-label">Vat</label>
                       <div class="col-7">
                         <input [value]="vat" class="form-control form-control-sm" readonly type="text">
@@ -145,12 +137,12 @@
                       <div class="col-7">
                         <select [(ngModel)]="sales.paymentType" class="form-control" formControlName="paymentType" id="paymentType"
                                 name="paymentType" required type="text">
-                          <option value="0">Please Select</option>
+                          <option selected value="">Please Select</option>
                           <option *ngFor="let item of paymentTypeList" value="{{item}}">{{item}}</option>
                         </select>
                       </div>
                     </div>
-                    <button [disabled]="!salesAddForm.valid" class="btn btn-info btn-sm" type="submit">New Sales</button>
+                    <button [disabled]="!salesAddForm.valid" class="btn btn-info btn-sm" type="submit">Record Sales</button>
                   </fieldset>
                 </div>
               </div>

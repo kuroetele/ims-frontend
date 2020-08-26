@@ -33,4 +33,8 @@ export class ProductService {
     return this.http.get('/api/products/' + id);
   }
 
+  getTopSellingProducts() {
+    return this.http.get('/api/products/top-selling');
+  }
+
 }

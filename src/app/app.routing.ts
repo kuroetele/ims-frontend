@@ -16,6 +16,7 @@ import {SalesReportComponent} from './report/sales-report.component';
 
 import {LoginComponent} from './login/login.component';
 import {AuthGuard} from './_guards';
+import {TopProductReportComponent} from './report/top-product-report/top-product-report.component';
 
 export const appRoutes: Routes = [
   {
@@ -41,6 +42,12 @@ export const appRoutes: Routes = [
       {path: 'setting', component: SettingComponent, canActivate: [AuthGuard], data: {title: 'Manage Setting'}},
       {path: 'profile-settings', component: ProfileSettingsComponent, canActivate: [AuthGuard], data: {title: 'Manage Profile Settings'}},
       {path: 'sales-report', component: SalesReportComponent, canActivate: [AuthGuard], data: {title: 'Sales Report'}},
+      {
+        path: 'top-product-report',
+        component: TopProductReportComponent,
+        canActivate: [AuthGuard],
+        data: {title: 'Top Selling Products Report'}
+      },
     ]
   },
   {

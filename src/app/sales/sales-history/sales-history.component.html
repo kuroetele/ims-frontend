@@ -34,7 +34,7 @@
                   <td>{{item.invoiceNumber}}</td>
                   <td>{{item.customer ? item.customer.name : '-'}}</td>
                   <td>{{item.createdAt}}</td>
-                  <td>{{item.grossAmount}} {{item.currency}}</td>
+                  <td>{{item.currency}} {{item.grossAmount}}</td>
                   <td>{{item.soldBy}}</td>
                   <td class="action">
                     <button (click)="salesDetails(this.salesList[i].id)" class="btn btn-outline-primary btn-sm" type="button"><i

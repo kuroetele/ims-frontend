@@ -54,7 +54,6 @@ export class SalesComponent implements OnInit {
       subCategory: '',
       allProduct: '',
       subTotal: '',
-      discount: '0',
       grandTotal: '',
       receivedAmount: '',
       due: '',
@@ -70,7 +69,6 @@ export class SalesComponent implements OnInit {
       allCategory: new FormControl('', Validators.compose([Validators.required])),
       allProduct: new FormControl('', Validators.compose([Validators.required])),
       subTotal: new FormControl(''),
-      discount: new FormControl(''),
       grandTotal: new FormControl(''),
       due: new FormControl(''),
       paymentType: new FormControl('', Validators.compose([Validators.required])),
@@ -108,7 +106,7 @@ export class SalesComponent implements OnInit {
   customer() {
     this.dataService.getAllCustomer()
       .pipe().subscribe(data => {
-      this.allCustomer = (data as any).data;
+      this.allCustomer = (data as any).data.filter(c => !c.deleted);
     });
   }
 
@@ -154,9 +152,7 @@ export class SalesComponent implements OnInit {
 
   changeGrandTotal() {
     setTimeout(() => {
-      let subTotal = this.sales.subTotal;
-      const discount = this.sales.discount;
-      subTotal = subTotal - (subTotal / 100 * discount);
+      const subTotal = this.sales.subTotal;
       const total = subTotal + (subTotal / 100 * this.vat);
       this.sales.grandTotal = total.toFixed(2) - this.loyaltyPoints;
       this.amountChange();
@@ -193,7 +189,6 @@ export class SalesComponent implements OnInit {
     const request = {
       customerId: this.sales.customer,
       paymentType: this.sales.paymentType,
-      discountPercentage: this.sales.discount || 0,
       redeemLoyaltyPoints: this.sales.redeemLoyaltyPoints,
       productAndQuantity: this.sales.products.reduce((previous, obj) => {
         previous[obj.id] = obj.quantity;
