@@ -98,7 +98,7 @@ export class SalesComponent implements OnInit {
   categoryByProduct(key, val) {
     this.dataService.getCategoryByProduct(key, val)
       .pipe().subscribe(data => {
-      this.productList = (data as any).data;
+      this.productList = (data as any).data.filter(p => !p.deleted);
       this.sales.allProduct = '';
     });
   }

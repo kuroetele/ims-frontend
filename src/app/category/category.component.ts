@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Subject} from 'rxjs/';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {AlertService, AppService, CategoryService} from '../_services/index';
+import {AlertService, AppService, CategoryService} from '../_services';
 import {NgbActiveModal, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 class CategoryGrid {

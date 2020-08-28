@@ -253,8 +253,9 @@ export class ProductComponent implements OnInit {
   }
 
   async insertAction(val) {
-    if (this.productAddForm.value.minQuantity < this.productAddForm.value.maxQuantity) {
-      this.alertService.error('min quantity cannot be less than max quantity');
+    if (this.productAddForm.value.minQuantity > this.productAddForm.value.maxQuantity) {
+      this.alertService.error('min quantity cannot be more than max quantity');
+      return;
     }
     const formData: FormData = new FormData();
     if (this.fileList !== undefined) {
@@ -268,7 +269,7 @@ export class ProductComponent implements OnInit {
     formData.append('categoryId', this.productAddForm.value.categoryId);
     formData.append('costPrice', this.productAddForm.value.costPrice);
     formData.append('price', this.productAddForm.value.price);
-    formData.append('deleted', this.productAddForm.value.deleted + '');
+    formData.append('deleted', this.productAddForm.value.deleted);
     formData.append('availableQuantity', this.productAddForm.value.availableQuantity);
     formData.append('minQuantity', this.productAddForm.value.minQuantity);
     formData.append('maxQuantity', this.productAddForm.value.maxQuantity);
