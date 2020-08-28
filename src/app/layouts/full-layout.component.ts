@@ -10,9 +10,9 @@ import {map} from 'rxjs/operators';
 export class FullLayoutComponent implements OnInit {
   userData = {
     profileName: '',
-    image: ''
+    image: '',
+    passwordChangeRequired: false
   };
-  getToken: any;
   showDNClass = false;
   setting: any = {};
   showMenu = false;
@@ -27,47 +27,28 @@ export class FullLayoutComponent implements OnInit {
         console.log(data);
         this.userData.profileName = data.name;
         this.userData.image = data.image;
+        this.userData.passwordChangeRequired = data.passwordChangeRequired;
         this.showMenu = !data.passwordChangeRequired;
       });
-  }
-
-  public toggled(open: boolean): void {
-    console.log('Dropdown is now: ', open);
-  }
-
-  public toggleDropdown($event: MouseEvent): void {
-    $event.preventDefault();
-    $event.stopPropagation();
-    this.status.isopen = !this.status.isopen;
   }
 
   ngOnInit(): void {
     setTimeout(() => {
       this.showDNClass = true;
-    }, 20);
-
-    this.getToken = window.localStorage.getItem('currentUser');
-    this.dataService.checkLogin(this.getToken)
-      .pipe(map(data => (data as any).data))
-      .subscribe(data => {
-        this.userData = {
-          profileName: data.name,
-          image: data.image
-        };
-        this.showMenu = !data.passwordChangeRequired;
-      });
+      this.dataService.fetchMenu()
+        .pipe(map(data => (data as any).data))
+        .subscribe(data => {
+          console.log(data);
+          this.dataService.setMenu(data);
+          // this.nav = data;
+          this.nav = this.filterVisibleMenuItems(data);
+          this.showMenu = !this.userData.passwordChangeRequired;
+        });
+    }, 200);
 
     this.settingService.getSettingSubject().subscribe(data => {
       this.setting = data;
     });
-
-    this.dataService.fetchMenu()
-      .pipe(map(data => (data as any).data))
-      .subscribe(data => {
-        this.dataService.setMenu(data);
-        // this.nav = data;
-        this.nav = this.filterVisibleMenuItems(data);
-      });
   }
 
   public logout(): void {

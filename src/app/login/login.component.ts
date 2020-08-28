@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AlertService, AuthenticationService, SettingService} from '../_services';
+import {AlertService, AppService, AuthenticationService, SettingService} from '../_services';
 import {map} from 'rxjs/operators';
 
 
@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit {
     public router: Router,
     private dataService: AuthenticationService,
     private settingService: SettingService,
+    private appService: AppService,
     private alertService: AlertService
   ) {
   }
@@ -50,16 +51,28 @@ export class LoginComponent implements OnInit {
       this.dataService.login(UserInput)
         .pipe().subscribe(
         data => {
-          this.router.navigate(['/dashboard']);
+          this.appService.checkLogin(data.token)
+            .pipe(map(user => (user as any).data))
+            .subscribe(user => {
+                this.appService.emitProfileData(user);
+                if (user.passwordChangeRequired) {
+                  this.router.navigate(['/profile-settings'], {queryParams: {tab: 'password-change'}});
+                } else {
+                  this.router.navigate(['/dashboard']);
+                }
+              },
+              error => this.resolveError(error)
+            );
         },
-        error => {
-          this.show = true;
-          this.textMessage = error;
-          this.loading = false;
-          this.alertService.error(error);
-        });
+        error => this.resolveError(error));
     }
 
   }
 
+  private resolveError(error) {
+    this.show = true;
+    this.textMessage = error;
+    this.loading = false;
+    this.alertService.error(error);
+  }
 }
